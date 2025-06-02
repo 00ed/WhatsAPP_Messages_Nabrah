@@ -4,12 +4,16 @@ import os
 
 app = Flask(__name__)
 
-# Load credentials (use env variables in production)
-ACCOUNT_SID = 'your_account_sid_here'
-AUTH_TOKEN = 'your_auth_token_here'
-FROM_WHATSAPP_NUMBER = 'whatsapp:+14155238886'  # Twilio sandbox number
+# Load credentials from environment variables (for Render)
+ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
+AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
+FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14155238886')
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
+
+@app.route('/')
+def home():
+    return "✅ WhatsApp Callback API is running!"
 
 @app.route('/post-call', methods=['POST'])
 def post_call_callback():
@@ -29,5 +33,6 @@ def post_call_callback():
 
     return jsonify({"status": "sent", "sid": message.sid}), 200
 
-if __name__ == "__main__":
-    app.run(port=5000)
+# ❌ Remove app.run() — Gunicorn will handle running the server
+# if __name__ == "__main__":
+#     app.run(port=5000)

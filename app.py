@@ -5,8 +5,8 @@ import os
 app = Flask(__name__)
 
 # Load credentials (use env variables in production)
-ACCOUNT_SID = 'AC91ec67ed1d000b4c4cf23453e65c4072'
-AUTH_TOKEN = '82bdf5d8f3c2648d00b2bc21e34d581f'
+ACCOUNT_SID = 'your_account_sid_here'
+AUTH_TOKEN = 'your_auth_token_here'
 FROM_WHATSAPP_NUMBER = 'whatsapp:+14155238886'  # Twilio sandbox number
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)

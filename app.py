@@ -20,7 +20,7 @@ def post_call_callback():
     data = request.json
 
     user_phone = data.get('phone')   # e.g., 9665XXXXXXXX
-    message_text = data.get('message', '✅ Your AI call is complete. Thank you!')
+    message_text = data.get('message', '✅ Your AI call is complete.\nHi {{student_name}}, thank you for speaking with us. Your due amount is {{amount_due}} SAR.')
 
     if not user_phone:
         return jsonify({"error": "Missing phone"}), 400

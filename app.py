@@ -33,6 +33,11 @@ def post_call_callback():
 
     return jsonify({"status": "sent", "sid": message.sid}), 200
 
-# ❌ Remove app.run() — Gunicorn will handle running the server
-# if __name__ == "__main__":
-#     app.run(port=5000)
+@app.route('/pre-call', methods=['POST'])
+def pre_call_callback():
+    # Example: return dynamic or fixed values for the voice agent to use
+    return jsonify({
+        "phone": "966502104776",
+        "student_name": "Mohammed",
+        "amount_due": 1200.5
+    })

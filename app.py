@@ -19,11 +19,18 @@ def home():
 def post_call_callback():
     data = request.json
 
-    user_phone = data.get('phone')   # e.g., 9665XXXXXXXX
-    message_text = data.get('message', '✅ Your AI call is complete.\nHi {{parent_name}}, thank you for speaking with us. Your due amount is {{amount_due}} SAR. For you child {{student_name}}.')
+    user_phone = data.get('phone')  # e.g., 9665XXXXXXXX
+    student_name = data.get('student_name')
+    parent_name = data.get('parent_name')
+    amount_due = data.get('amount_due')
 
     if not user_phone:
         return jsonify({"error": "Missing phone"}), 400
+
+    # Auto-generate message if not provided
+    message_text = data.get('message') or (
+        f"أهلاً {parent_name}، يوجد مبلغ مستحق بقيمة {amount_due} ريال على الطالب {student_name}. لمزيد من التفاصيل أو المساعدة، تواصل معنا. مدارس القمم."
+    )
 
     message = client.messages.create(
         from_=FROM_WHATSAPP_NUMBER,

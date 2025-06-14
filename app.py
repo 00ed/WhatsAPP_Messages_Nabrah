@@ -44,9 +44,11 @@ def post_call_callback():
 def pre_call_callback():
     data = request.json
     student_id = data.get('student_id')
+    print(f"Received pre-call for student_id: {student_id}")  # Log input
 
     # Example: simulate dynamic lookup
     if student_id == '001':
+        print("✅ student 001 pass")
         return jsonify({
             "phone": "966502104776",
             "student_name": "Eyad",
@@ -54,6 +56,7 @@ def pre_call_callback():
             "amount_due": 1200.5
         })
     elif student_id == '002':
+        print("✅ student 002 pass")
         return jsonify({
             "phone": "966580323262",
             "student_name": "Mohammed",
@@ -61,4 +64,5 @@ def pre_call_callback():
             "amount_due": 950
         })
     else:
+        print("❌ Unknown student_id")
         return jsonify({"error": "Student not found"}), 404

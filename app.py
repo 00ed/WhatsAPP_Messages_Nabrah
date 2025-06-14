@@ -19,26 +19,47 @@ def home():
 def post_call_callback():
     data = request.json
 
-    user_phone = data.get('phone')  # e.g., 9665XXXXXXXX
+    # Extract data
+    user_phone = data.get('phone')          # e.g., 9665XXXXXXXX
     student_name = data.get('student_name')
     parent_name = data.get('parent_name')
     amount_due = data.get('amount_due')
+    message_text = data.get('message')
 
+    # === Debug logs ===
+    print("=== Post-Call Triggered ===")
+    print(f"Received Data: {data}")
+    print(f"Phone: {user_phone}")
+    print(f"Parent: {parent_name}")
+    print(f"Student: {student_name}")
+    print(f"Amount Due: {amount_due}")
+    print(f"Message Provided?: {'Yes' if message_text else 'No'}")
+
+    # Check for missing phone
     if not user_phone:
+        print("❌ Error: Missing phone number!")
         return jsonify({"error": "Missing phone"}), 400
 
-    # Auto-generate message if not provided
-    message_text = data.get('message') or (
-        f"أهلاً {parent_name}، يوجد مبلغ مستحق بقيمة {amount_due} ريال على الطالب {student_name}. لمزيد من التفاصيل أو المساعدة، تواصل معنا. مدارس القمم."
+    # Generate message if not provided
+    message_text = message_text or (
+        f"أهلاً {parent_name}، يوجد مبلغ مستحق بقيمة {amount_due} ريال على الطالب {student_name}. "
+        f"لمزيد من التفاصيل أو المساعدة، تواصل معنا. مدارس القمم."
     )
 
+    print(f"📤 Final WhatsApp Message: {message_text}")
+    print(f"📞 Sending to: whatsapp:+{user_phone}")
+
+    # Send message via Twilio
     message = client.messages.create(
         from_=FROM_WHATSAPP_NUMBER,
         to=f"whatsapp:+{user_phone}",
         body=message_text
     )
 
+    print("✅ Message sent successfully!")
+    print(f"Twilio SID: {message.sid}")
     return jsonify({"status": "sent", "sid": message.sid}), 200
+
 
 @app.route('/pre-call', methods=['POST'])
 def pre_call_callback():

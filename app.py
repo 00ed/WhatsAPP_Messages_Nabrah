@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Load credentials from environment variables (for Render)
 ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
 AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
-FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14066292642')
+FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14155238886')
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
@@ -54,7 +54,7 @@ def post_call_callback():
     )
 
     print(f"📤 Final WhatsApp Message: {message_text}")
-    print(f"📞 Sending to: whatsapp:+{user_phone}")
+    print(f"📞 Sending to: whatsapp:{user_phone}")
 
     # Send message via Twilio
     try:

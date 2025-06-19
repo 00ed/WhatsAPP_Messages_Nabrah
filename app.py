@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from twilio.rest import Client
 import os
+import json
 
 app = Flask(__name__)
 
@@ -40,9 +41,9 @@ def post_call_callback():
         return jsonify({"error": "Missing phone"}), 400
 
     # Generate message if not provided
-    message_text = message_text or (
-        f"أهلاً {parent_name}، يوجد مبلغ مستحق بقيمة {amount_due} ريال على الطالب {student_name}. "
-        f"لمزيد من التفاصيل أو المساعدة، تواصل معنا. مدارس القمم."
+    message_text = (
+        data.get('message') or
+        f"أهلاً {parent_name}، يوجد مبلغ مستحق بقيمة {amount_due} ريال على الطالب {student_name}. لمزيد من التفاصيل أو المساعدة، تواصل معنا. مدارس القمم."
     )
 
     print(f"📤 Final WhatsApp Message: {message_text}")

@@ -10,6 +10,14 @@ ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
 AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14155238886')
 
+# Load credentials from environment variables (for Hugging Face)
+HF_API_KEY = os.environ.get('HF_API_KAY')
+HF_MODEL_URL = os.environ.get('HF_MODEL_URL', 'https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english')
+HF_headers = {
+    "Authorization": f"Bearer {HF_API_KEY}"
+}
+
+
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
 @app.route('/')
@@ -75,6 +83,7 @@ def post_call_callback():
 
 @app.route('/pre-call', methods=['POST'])
 def pre_call_callback():
+    print("=== Pre-Call Triggered ===")
     data = request.json
     student_id = data.get('student_id')
     print(f"Received pre-call for student_id: {student_id}")  # Log input
@@ -86,7 +95,7 @@ def pre_call_callback():
             "phone": "966502104776",
             "student_name": "Eyad",
             "parent_name": "Amer",
-            "amount_due": 1200.5
+            "amount_due": 1200
         })
     elif student_id == '002':
         print("✅ student 002 pass")
@@ -99,3 +108,22 @@ def pre_call_callback():
     else:
         print("❌ Unknown student_id")
         return jsonify({"error": "Student not found"}), 404
+
+
+@app.route('/post-analysis', methods=['POST'])
+def post_analysis_callback():
+    print("=== Post-Analysis Triggered ===")
+
+    data = request.json
+    call_details = json.loads(data.get("call_details", "{}"))
+
+    transcript = call_details.get("transcript", [])
+    full_text = " ".join([turn['message'] for turn in transcript])
+
+    response = requests.post(HF_MODEL_URL, headers=HF_headers, json={"inputs": full_text})
+    result = response.json()
+
+    print("📊 Analysis Result:", result)
+
+    # You can also store or forward this analysis as needed
+    return jsonify({"analysis": result}), 200

@@ -19,21 +19,20 @@ def home():
 def post_call_callback():
     data = request.json
 
-    # Extract data
-    user_phone = data.get('phone')          # e.g., 9665XXXXXXXX
-    student_name = data.get('student_name')
-    parent_name = data.get('parent_name')
-    amount_due = data.get('amount_due')
-    message_text = data.get('message')
+    # Step 1: Parse the nested JSON string
+    call_data = json.loads(data.get("call_details", "{}"))
 
-    # === Debug logs ===
-    print("=== Post-Call Triggered ===")
-    print(f"Received Data: {data}")
-    print(f"Phone: {user_phone}")
-    print(f"Parent: {parent_name}")
-    print(f"Student: {student_name}")
-    print(f"Amount Due: {amount_due}")
-    print(f"Message Provided?: {'Yes' if message_text else 'No'}")
+    # Step 2: Extract variables from it
+    variables = call_data.get("variables", {})
+    user_phone = variables.get("phone")
+    parent_name = variables.get("parent_name")
+    student_name = variables.get("student_name")
+    amount_due = variables.get("amount_due")
+
+    print("Phone:", user_phone)
+    print("Parent:", parent_name)
+    print("Student:", student_name)
+    print("Amount Due:", amount_due)
 
     # Check for missing phone
     if not user_phone:

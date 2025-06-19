@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Load credentials from environment variables (for Render)
 ACCOUNT_SID = os.environ.get('ACCOUNT_SID')
 AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
-FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14155238886')
+FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14066292642')
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
@@ -18,7 +18,10 @@ def home():
 
 @app.route('/post-call', methods=['POST'])
 def post_call_callback():
+    print("=== Post-Call Triggered ===")
     data = request.json
+
+    print("Received Data:", data)
 
     # Step 1: Parse the nested JSON string
     call_data = json.loads(data.get("call_details", "{}"))

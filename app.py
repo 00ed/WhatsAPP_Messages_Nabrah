@@ -38,6 +38,10 @@ def post_call_callback():
     print("Student:", student_name)
     print("Amount Due:", amount_due)
 
+    # Normalize phone number (make sure it starts with +)
+    if not str(user_phone).startswith('+'):
+        user_phone = f"+{user_phone}"
+
     # Check for missing phone
     if not user_phone:
         print("❌ Error: Missing phone number!")
@@ -53,11 +57,16 @@ def post_call_callback():
     print(f"📞 Sending to: whatsapp:+{user_phone}")
 
     # Send message via Twilio
+    try:
     message = client.messages.create(
         from_=FROM_WHATSAPP_NUMBER,
-        to=f"whatsapp:+{user_phone}",
+        to=f"whatsapp:{user_phone}",
         body=message_text
     )
+    except Exception as e:
+        print("❌ Error sending WhatsApp message:", e)
+        return jsonify({"error": str(e)}), 500
+
 
     print("✅ Message sent successfully!")
     print(f"Twilio SID: {message.sid}")

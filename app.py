@@ -13,7 +13,7 @@ FROM_WHATSAPP_NUMBER = os.environ.get('FROM_WHATSAPP', 'whatsapp:+14155238886')
 
 # Load credentials from environment variables (for Hugging Face)
 HF_API_KEY = os.environ.get('HF_API_KEY')
-HF_MODEL_URL = os.environ.get('HF_MODEL_URL', 'https://api-inference.huggingface.co/models/facebook/bart-large-mnli')
+HF_MODEL_URL = os.environ.get('HF_MODEL_URL', 'https://api-inference.huggingface.co/models/joeddav/xlm-roberta-large-xnli')
 HF_headers = {
     "Authorization": f"Bearer {HF_API_KEY}"
 }

@@ -125,7 +125,7 @@ def post_analysis_callback():
     response = requests.post(HF_MODEL_URL, headers=HF_headers, json={
         "inputs": full_text,
         "parameters": {
-            "candidate_labels": ["polite", "rude", "confused", "interested", "neutral"]
+            "candidate_labels": ["مهذب", "غاضب", "مرتبك", "مهتم", "مستعجل", "محايد", "مشوش"]
         }
     })
     
@@ -144,5 +144,6 @@ def post_analysis_callback():
     top_label = result['labels'][0]
     confidence = round(result['scores'][0] * 100, 2)
     print(f"🧠 Most likely label: {top_label} ({confidence}%)")
+    
     # You can also store or forward this analysis as needed
     return jsonify({"analysis": result}), 200

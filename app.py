@@ -130,7 +130,6 @@ def post_analysis_callback():
     })
     
     # Debug if response is empty or invalid
-    print("📥 Raw response text:", response.text)
     print("📋 Status code:", response.status_code)
     
     try:

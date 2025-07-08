@@ -146,3 +146,7 @@ def post_analysis_callback():
     
     # You can also store or forward this analysis as needed
     return jsonify({"analysis": result}), 200
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))  # Render will set PORT env var
+    app.run(host='0.0.0.0', port=port)
